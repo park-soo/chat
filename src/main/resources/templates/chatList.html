@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>채팅 페이지</title>
+</head>
+<body>
+
+<h1>채팅 페이지</h1>
+
+<!-- 상품 정보 표시 -->
+
+<!-- 채팅 목록 -->
+<h2>채팅 목록</h2>
+<ul>
+    <li th:each="chat : ${chats}">
+        <span th:text="${chat.seller}"></span>: <span th:text="${chat.title}"></span>
+    </li>
+</ul>
+
+<!-- 채팅 창 -->
+<h2>채팅 창</h2>
+<!--<form id="chatForm" method="POST" action="/sendChat" enctype="multipart/form-data">
+    <input type="hidden" name="productId" th:value="${product.id}" />
+    <input type="text" name="message" placeholder="채팅을 입력하세요" required />
+    <input type="file" name="file" />
+    <button type="submit">전송</button>
+</form>-->
+
+<script th:inline="javascript">
+    // 여기서 채팅 메시지를 불러오는 로직과 실시간 채팅 기능을 구현하세요.
+    const socket = new WebSocket('ws://localhost:8080/chat');
+
+    // WebSocket 연결이 열렸을 때 실행되는 콜백 함수
+    socket.onopen = function(event) {
+        console.log('WebSocket 연결이 열렸습니다.');
+    };
+
+    // WebSocket 메시지를 수신할 때 실행되는 콜백 함수
+    socket.onmessage = function(event) {
+        const message = event.data;
+        console.log('받은 메시지:', message);
+
+        // 받은 메시지를 채팅 목록에 추가하는 로직을 작성하세요.
+        const chatList = document.getElementById('chatList');
+
+        function addMessageToChatList(message) {
+            const li = document.createElement('li');
+            li.textContent = message;
+            chatList.appendChild(li);
+        }
+    };
+
+    // WebSocket 연결이 닫혔을 때 실행되는 콜백 함수
+    socket.onclose = function(event) {
+        console.log('WebSocket 연결이 닫혔습니다.');
+    };
+
+    // WebSocket 에러가 발생했을 때 실행되는 콜백 함수
+    socket.onerror = function(event) {
+        console.error('WebSocket 에러:', event);
+    };
+
+    // 채팅 메시지 전송 로직
+    function sendChatMessage(message) {
+        socket.send(message);
+    }
+</script>
+
+</body>
+</html>

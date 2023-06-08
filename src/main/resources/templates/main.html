@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Main Page</title>
+</head>
+<body>
+<h1>Main Page</h1>
+    <p>id: <span th:text="${userDto.id}"></span></p>
+    <p>Email: <span th:text="${userDto.email}"></span></p>
+    <p>Username: <span th:text="${userDto.username}"></span></p>
+    <p>password: <span th:text="${userDto.password}"></span></p>
+
+<a href="/sellList">판매목록리스트</a>
+
+
+</body>
+</html>
