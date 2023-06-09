@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Main Page</title>
+    <style>
+        .chat-button {
+            display: inline-block;
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>판매 공간</h1>
+<div th:if="${products}">
+    <ul>
+        <li th:each="product : ${products}">
+            <p>판매자: <span class="seller" th:text="${product.seller}"></span></p>
+            <p>판매제목: <span class="title" th:text="${product.title}"></span></p>
+            <p>판매금액: <span class="price" th:text="${product.price}"></span></p>
+            <p>판매내용: <span class="description" th:text="${product.description}"></span></p>
+            <p>판매이미지: <span class="imagePath" th:text="${product.imagePath}"></span></p>
+            <img th:src="@{'/images/' + ${product.imagePath}}" alt="Product Image" />
+            <button class="chat-button">채팅하기</button>
+
+        </li>
+    </ul>
+    <a href="/sellList">판매목록리스트</a>
+</div>
+<div th:unless="${products}">
+    <p>판매되고 있는 내용이 없습니다.</p>
+</div>
+<a href="/sell">판매등록하기</a>
+
+<script th:inline="javascript">
+    const buttons = document.getElementsByClassName('chat-button');
+    Array.from(buttons).forEach((button) => {
+        button.addEventListener('click', function() {
+            const productInfo = this.parentElement;
+            const seller = productInfo.querySelector('.seller').textContent;
+            const title = productInfo.querySelector('.title').textContent;
+            const price = productInfo.querySelector('.price').textContent;
+            const description = productInfo.querySelector('.description').textContent;
+            const imagePath = productInfo.querySelector('.imagePath').textContent;
+
+            const data = {
+                seller: seller,
+                title: title,
+                price: price,
+                description: description,
+                imagePath: imagePath
+            };
+
+            // 서버로 데이터 전송
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response;
+
+                    } else {
+                        throw new Error('Server response was not valid JSON.');
+                    }
+                })
+                .then(result => {
+                    // 서버로부터의 응답을 처리
+                    console.log(result);
+                    location.href="chatList";
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    });
+</script>
+</body>
+</html>

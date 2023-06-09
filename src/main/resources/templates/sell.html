@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>판매하기</title>
+</head>
+<body>
+<h1>판매하기</h1>
+ <form action="/sell" method="post" enctype="multipart/form-data">
+  <div>
+    <label for="seller">판매자</label>
+    <input type="text" id="seller" name="seller" th:value="${userDto.username}" readonly>
+  </div>
+  <div>
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title">
+  </div>
+  <div>
+    <label for="price">가격</label>
+    <input type="text" id="price" name="price">
+  </div>
+  <div>
+    <label for="description">내용</label>
+    <textarea id="description" name="description"></textarea>
+  </div>
+  <div>
+    <label for="image">이미지</label>
+    <input type="file" id="image" name="image">
+  </div>
+  <button type="submit">등록</button>
+</form>
+<a href="/sellList">메인 페이지로 돌아가기</a>
+</body>
+</html>
